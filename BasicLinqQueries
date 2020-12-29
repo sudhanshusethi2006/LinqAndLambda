@@ -1,0 +1,142 @@
+internal class Person
+    {
+        public string name;
+        public int height;
+        public int weight;
+        public int age;
+
+    }
+
+    internal class YoungPeople
+    {
+        public string name;
+        public int age;
+    }
+    
+    
+     class BasicLinqQueries
+    {
+        static void Main(string[] args)
+        {
+            string[] CatNames = { "Lucky", "Bella", "Luna", "Oreo", "Simba", "Toby", "Loki", "Oscar" };
+
+            int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 45, 678, 23456 };
+            //     Console.WriteLine(string.Join("::", numbers));
+
+
+            var small = from n in numbers
+                        where n < 5
+                        select n;
+
+            var catsWithA = from cat in CatNames
+                            where cat.Contains("a")
+                            select cat;
+
+            var gettheNumbers = from n in numbers
+                                where n > 5 && n < 10
+                                orderby n ascending
+                                select n;
+
+
+            // Console.WriteLine(catsWithA);
+            // Console.WriteLine(string.Join("  ", small));
+            //   ----------------------------------------------------DATA------------------------
+
+            List<Person> people = new List<Person>()
+               {
+                   new Person() { name="Tod", height=180, weight=56, age=12 },
+                   new Person() { name="jogn", height=156, weight=74, age=15 },
+                   new Person() { name="sam", height=170, weight=76, age=34 },
+                   new Person() { name="anna", height=165, weight=73, age=56 },
+                   new Person() { name="Maria", height=160, weight=80, age=44 },
+                   new Person() { name="sam", height=170, weight=76, age=34 },
+                   new Person() { name="anna", height=165, weight=73, age=56 },
+                   new Person() { name="Maria", height=160, weight=80, age=44 }
+               };
+
+            //   ----------------------------------------------------------------------------
+            var FourCharpeople = from p in people
+                                 where p.name.Length == 4
+                                 orderby p.name, p.weight descending
+                                 select p;
+
+            foreach (var item in FourCharpeople)
+            {
+                //   Console.WriteLine($"Name : {item.name} + Weight {item.weight}");
+            }
+
+            //   ----------------------------------------------------------------------------
+
+            //Creating Anonymous objects 
+            //
+            var student = new { Id = 12, name = "sudhanshu", age = 30 };
+            //student.age = 12; not allowed because all properties are read only
+
+
+            //   -----------------------------anonymous type with custom name-----------------------------------------------
+
+            var youngPeople1 = from p in people
+                              where p.age < 25
+                              select new  { Ann_name = p.name, Ann_age = p.age };
+
+            //   -----------------------------anonymous without custom name-----------------------------------------------
+
+            var youngPeople2 = from p in people
+                              where p.age < 25
+                              select new {  p.name, p.age };
+
+
+            //   -----------------------------Young People Type List-----------------------------------------------
+
+            var youngPeople = from p in people
+                              where p.age < 25
+                              select new YoungPeople() { name = p.name, age = p.age };
+
+
+
+            //-------------------------------------Let Keyword----------------------------------------------------------------
+
+            var PeopleWithA = from p in people
+                              let FirstChar = p.name.ToLower()[0]
+                              where FirstChar == 'a'
+                              let HeightWeigth = string.Format($"{p.height + ": " + p.weight}")
+                              select new { p.name, HeightWeigth };
+
+
+            //-------------------------------Collection inside Collection------------------------------------------------------------------
+
+            List<List<int>> lists = new List<List<int>>()
+            {
+                new List<int>(){1,2,3 },
+                new List<int>(){4,5,6 },
+                new List<int>(){7,8,9 }
+            };
+
+            var AllNumbers = from outerList in lists
+                             let number = outerList
+                             from innerList in number
+                             select innerList;
+            //OR
+            var AllNumbers2 = from outerList in lists
+                           
+                             from innerList in outerList
+                              select innerList;
+
+            Console.WriteLine(String.Join(" ", AllNumbers));
+
+            Console.WriteLine(String.Join(" ", AllNumbers2));
+
+            var AllNumbersSquare = from o in lists
+                                   
+                                   from i in o
+                                   let prod= i *i
+                                   where prod<50
+                                   select prod;
+                                   
+            Console.WriteLine(String.Join(" ",AllNumbersSquare));
+
+            //---------------
+
+            Console.Read();
+        }
+    }
