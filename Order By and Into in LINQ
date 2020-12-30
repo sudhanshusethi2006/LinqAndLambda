@@ -1,0 +1,68 @@
+//Even or odd 
+
+    int[] numbers = { 5, 6, 3, 2, 1, 5, 7, 234, 34, 55, 77, 78, 99, 97 };
+            var even = from n in numbers
+                       where n % 2 == 0
+                       select n;
+
+            var GroupEvenOrOdd = from n in numbers
+                                 let temp = (n % 2 == 0)
+                                 group n by temp;
+
+            foreach (var key in GroupEvenOrOdd)
+            {
+                Console.WriteLine(key);
+                foreach (var item in key)
+                {
+                    Console.WriteLine(item);
+                }
+            }
+            
+            
+            
+//-----------------------------------------------------------------
+// Group by and into
+
+  List<Person> people = new List<Person>()
+               {
+                   new Person() { name="Tod", height=180, weight=56, age=12 },
+                     new Person() { name="Tod", height=180, weight=56, age=14 },
+                     new Person() { name="Tod", height=180, weight=56, age=16 },
+                   new Person() { name="jogn", height=156, weight=74, age=12 },
+                   new Person() { name="asam", height=170, weight=76, age=34 },
+                   new Person() { name="anna", height=165, weight=73, age=56 },
+                   new Person() { name="Maria", height=160, weight=80, age=44 },
+                   new Person() { name="sam", height=170, weight=76, age=34 },
+                   new Person() { name="anna", height=165, weight=73, age=2 },
+                   new Person() { name="Maria", height=160, weight=80, age=100 },
+                     new Person() { name="aaMaria", height=160, weight=80, age=100 },
+                     new Person() { name="aMaria", height=160, weight=80, age=100 }
+               };
+
+
+
+            var ageCategories = from a in people
+                                let category = a.age < 18 ? "young" : (a.age > 18 && a.age < 60 ? "adult" : "senior")
+                                group a by category;
+
+            foreach (var key in ageCategories)
+            {
+                Console.WriteLine(key.Key);
+                foreach (var item in key)
+                {
+                    Console.WriteLine($"name: {item.name} and  age : {item.age} ");
+                }
+            }
+
+
+// ---------------------------------------------------
+
+         var NumberOfPeople_Age = from a in people
+                     group a by a.age into myQuery
+                     select new {age= myQuery.Key, NumberOfPeople= myQuery.Count() };
+
+
+            foreach (var item in NumberOfPeople_Age)
+            {
+                Console.WriteLine(item.age + " Count: " + item.NumberOfPeople );
+            }
