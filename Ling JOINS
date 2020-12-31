@@ -1,0 +1,110 @@
+        List<Buyer> buyers = new List<Buyer>()
+            {
+                new Buyer() { Name = "Johny", District = "Fantasy District", Age = 22},
+                new Buyer() { Name = "Peter", District = "Scientists District", Age = 40},
+                new Buyer() { Name = "Paul", District = "Fantasy District", Age = 30 },
+                new Buyer() { Name = "Maria", District = "Scientists District", Age = 35 },
+                new Buyer() { Name = "Joshua", District = "EarthIsFlat District", Age = 40 },
+                new Buyer() { Name = "Sylvia", District = "Developers District", Age = 22 },
+                new Buyer() { Name = "Rebecca", District = "Scientists District", Age = 30 },
+                new Buyer() { Name = "Jaime", District = "Developers District", Age = 35 },
+                new Buyer() { Name = "Pierce", District = "Fantasy District", Age = 40 },
+                new Buyer() { Name = "sam ", District = "Great Science", Age = 40 }
+            };
+            List<Supplier> suppliers = new List<Supplier>()
+            {
+                new Supplier() { Name = "Harrison", District = "Fantasy District", Age = 22 },
+                new Supplier() { Name = "Charles", District = "Developers District", Age = 40 },
+                new Supplier() { Name = "Hailee", District = "Scientists District", Age = 35 },
+                new Supplier() { Name = "Taylor", District = "EarthIsFlat District", Age = 30 }
+            };
+
+
+
+            //--------------------------------------------------JOINS--------------------------------------
+
+
+            var innerJoin = from s in suppliers
+                            join b in buyers on
+                            s.District equals b.District
+                            select new
+                            {
+                                SupplersName = s.Name,
+                                BuyerName = b.Name,
+                                b.District
+                            };
+
+
+            foreach (var item in innerJoin)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine(new string('-', 50));
+            //---------------------------------------------------COMPOSITE JOIN--------
+
+            var CompositeJoin =from s in suppliers
+                               join b in buyers on new { s.District, s.Age } equals new { b.District, b.Age }
+                               select new
+                               {
+                                   Supplies = s,
+                                   BuyerNamb = b.Name
+                               };
+
+            foreach (var item in CompositeJoin)
+            {
+                Console.WriteLine($"District :  { item.Supplies.District}, Age: { item.Supplies.Age}");
+
+            }
+
+	//------------------------------------------------------------------
+
+		// new data 
+
+
+            //----------------------------------------------performing subquery in Group join--Gorup Inner join
+
+            Console.WriteLine(new string('-', 40));
+            var GroupJoin = from s in suppliers
+                            join b in buyers
+                            on s.District equals b.District into MyGroup
+                            select new
+                            {
+                                s.Name,
+                                Buyers = from b in MyGroup
+                                         orderby b.Age
+                                         select b
+                            };
+
+
+
+
+            foreach (var item in GroupJoin)
+            {
+                Console.WriteLine(item.Name + " here is the list of my buyers sorted by their age" );
+                foreach (var item2 in item.Buyers)
+                {
+                    Console.WriteLine("My Buyers is : " + item2.Name +  "  age : "  + item2.Age );
+                }
+            }
+
+
+
+            //// shorter way for left outer join 
+            ///
+
+            var LeftOuterJoinShorter = from b in buyers
+                                       join s in suppliers on b.District equals s.District into SuppliersGroup
+                                       from sg in SuppliersGroup.DefaultIfEmpty()
+                                       select new
+                                       {
+                                           b.Name,
+                                           b.District,
+                                           NewSupplierDistrict = sg.District ?? "Bueyrs new name",
+                                           NewSupplierName = sg?.Name ?? "California, USA"
+                                       };
+
+
+            foreach (var item in LeftOuterJoinShorter)
+            {
+                Console.WriteLine(item.Name + " - " + item.District + " - " + item.NewSupplierName + " - " + item.NewSupplierDistrict);
+            }
