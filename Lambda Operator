@@ -1,0 +1,238 @@
+
+
+// MAin method
+
+            int[] numbers = { 5,1,  3, 2, 4,  6, 7, 8, 9, 10, 45, 678, 23456 };
+
+var EvenNumbers = numbers.Where(x => x % 2 == 0);
+            var ShortWarrior = warriors.Where(x => x.Height == 100).Select(X=>X.Height).ToList();
+            // For each works only with List<T>
+            ShortWarrior.ForEach(x => Console.WriteLine(x));
+            
+
+  var GroupMaleOrFemaile = from p in people
+                                     group p by p.Gender;
+
+            var GroupByGender = people.Where(x=>x.Age>20).GroupBy(x => x.Gender);
+            foreach (var item in GroupMaleOrFemaile)
+            {
+                Console.WriteLine(item.Key);
+                foreach (var item2 in item)
+                {
+                    Console.WriteLine(item2.FirstName);
+                }
+            }
+            Console.WriteLine(new string('-', 40));
+            foreach (var item in GroupByGender)
+            {
+                Console.WriteLine(item.Key);
+                foreach (var item2 in item)
+                {
+                    Console.WriteLine(item2.FirstName);
+                }
+            }
+
+
+
+            ///
+
+            Console.WriteLine(new string('-', 40));
+            var alphaOrder = people.OrderBy(x => x.FirstName).GroupBy(x => x.FirstName[0]);
+
+            foreach (var item in alphaOrder)
+            {
+                Console.WriteLine(item.Key);
+                foreach (var item2 in item)
+                {
+                    Console.WriteLine(item2.FirstName);
+                }
+            }
+
+
+
+            //-----MULTI KEY -----------------------------------------
+
+            var multiKeyGroupBy = people.GroupBy(p => new { p.Gender, p.Age });
+
+
+            //------------------------------CUSTOM KEY-------------------------------
+
+            var OddEvenNumbers = numbers.GroupBy(x => (x % 2 == 0)? "Even" : "Odd");
+
+            foreach (var item in OddEvenNumbers)
+            {
+                Console.WriteLine("---" + item.Key);
+                foreach (var item2 in item)
+                {
+                    Console.WriteLine(item2);
+                }
+            }
+
+              var OddEvenNumbers_ordered = numbers.OrderBy(x=>x).GroupBy(x => (x % 2 == 0) ? "Even" : "Odd");
+
+     
+
+            Console.WriteLine(new string('-', 40));
+
+            foreach (var item in OddEvenNumbers_ordered)
+            {
+                Console.WriteLine("---" + item.Key);
+                foreach (var item2 in item)
+                {
+                    Console.WriteLine(item2);
+                }
+            }
+
+            Console.WriteLine(new string('-', 40));
+            var AgeGroups = people.GroupBy(x => x.Age < 20 ? "young" : x.Age >= 20 && x.Age =< 22 ? "Adult" : "senior");
+
+
+
+            foreach (var item in AgeGroups)
+            {
+                Console.WriteLine("---" + item.Key);
+                foreach (var item2 in item)
+                {
+                    Console.WriteLine(item2.Age);
+                }
+            }
+
+            ///--------------------CREATINNG VARIABLES inside group by-----------------
+            ///
+
+            var ageGroups = people.GroupBy(x =>
+
+             {
+                 var young = x.Age < 20;
+                 var adult = x.Age >= 20 && x.Age <= 22;
+
+                 var age = young ? "young" : adult ? "adult" : "senior";
+
+                 return age;
+
+             }
+            );
+
+            //---------------------------GROUP by and SELECT
+
+            var howManyOFEachGroup = people.GroupBy(x => x.Gender).Select(x => new {
+                Geneder = x.Key,
+                Count = x.Count()
+            });
+        
+            
+//---------------------
+
+    internal class Warrior
+    {
+        public int Height { get; set; }
+    }
+
+ internal class Person
+    {
+        private string firstName;
+        private string lastName;
+        private int id;
+        private int height;
+        private int age;
+
+        private Gender gender;
+
+        public string FirstName
+        {
+            get
+            {
+                return this.firstName;
+            }
+            set
+            {
+                this.firstName = value;
+            }
+        }
+
+        public string LastName
+        {
+            get
+            {
+                return this.lastName;
+            }
+            set
+            {
+                this.lastName = value;
+            }
+        }
+
+        public int ID
+        {
+            get
+            {
+                return this.id;
+            }
+            set
+            {
+                this.id = value;
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return this.height;
+            }
+            set
+            {
+                this.height = value;
+            }
+        }
+
+        public int Age
+        {
+            get
+            {
+                return this.age;
+            }
+            set
+            {
+                this.age = value;
+            }
+        }
+
+        public Gender Gender
+        {
+            get
+            {
+                return this.gender;
+            }
+            set
+            {
+                this.gender = value;
+            }
+        }
+
+        public Person(string firstName, string lastName, int id, int height, int age, Gender gender)
+        {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.id = id;
+            this.Height = height;
+            this.Age = age;
+            this.Gender = gender;
+        }
+    }
+
+    internal enum Gender
+    {
+        Male,
+        Female
+    }
+
+   List<Warrior> warriors = new List<Warrior>()
+            {
+                new Warrior() { Height = 100 },
+                new Warrior() { Height = 80 },
+                new Warrior() { Height = 100 },
+                new Warrior() { Height = 70 },
+            };
+            
+            
