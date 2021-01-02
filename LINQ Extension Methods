@@ -1,0 +1,114 @@
+static void Main(string[] args)
+        {
+
+            int[] numbers = { 5, 1, 3, 2, 4, 6, 7, 8, 9, 10, 45, 678, 23456 };
+            int[] numbers2 = { 5, 1, 3, 2, 44, 6, 7, 8, 9, 10, 45, 678, 23456 };
+
+            var oddNumbers = Enumerable.Range(1, 300).Where(n => n % 2 == 0);
+
+            var oddNumbers2 = from n in Enumerable.Range(1, 300)
+                              where n % 2 == 0
+                              select n;
+
+            var allChars = Enumerable.Range(0, 26).Select(x => (char)x + 'a').ToList();
+
+
+            // ways to check for equality--- Sequence Equal
+
+            Console.WriteLine(numbers.SequenceEqual(numbers2));
+
+            //----------------------------Set Operations
+
+
+            string s1 = "i am a  cat";
+            string s2 = "i am a dog";
+            // get all the unique items of a collection
+            var d = numbers.Distinct();
+            var d2 = s1.Distinct();
+
+            // intersect 
+            var intersect = s1.Intersect(s2);
+            var intIntersect = numbers.Intersect(numbers2);
+            
+            // union --get all the unique characters from both the collections 
+
+            var union = s1.Union(s2);
+            var IntUnion = numbers.Union(numbers2);
+
+
+            // Except - items that are different in two collections or what is there in first one but not in second one
+
+            var except = s1.Except(s2);
+            var IntExcept = numbers.Except(numbers2);
+
+
+            // Skip- skit the n elements and then return the rest
+
+            var skip = numbers.Skip(5);
+
+            var take = numbers.Take(5);
+
+            int[] topThree = numbers.OrderByDescending(x => x).Take(3).ToArray();
+
+            //------Skip while
+
+            int[] Skipwhile = numbers.SkipWhile(x => x < 20).ToArray();
+
+            //---take while
+            int[] takeWhile = numbers.TakeWhile(x => x > 30).ToArray();
+
+            //------All()
+
+            if(numbers.All(x=>x>0))
+            {
+                // this means all numbers in numbers is greate than 0
+            }
+
+            Console.WriteLine(s1.All(x=>x <'f'));
+
+            //-----Any()
+            // is there atleast one number greate than 20
+            Console.WriteLine(numbers.Any(x => x > 20));
+
+            Console.WriteLine(s1.Any(c => c == 't'));
+
+            if(s1.Any())
+            {
+                // true if the source contains any element
+            }
+
+
+            //--------Concatinated
+            int[] Concatinated = numbers.Concat(numbers2).ToArray();
+
+
+            /// ------Sum
+            /// 
+            int SumNumbers = numbers.Aggregate((p, i) => p + i);
+            int Sum = numbers.Sum();
+            //int sum2= numbers.Sum(x=>x.age);
+            //----------Product of all numbers
+            // here 1 is the start value
+            int ProductNumbers = numbers.Aggregate(1, (p, i) => p * i);
+
+
+            //--average
+
+            double average = numbers.Average();
+
+            //----min
+            int min = numbers.Min();
+
+            int first = numbers.First();
+            int first20 = numbers.FirstOrDefault(x => x == 20);
+
+
+
+            int max = numbers.Max();
+
+            int last = numbers.Last();
+
+            Random random = new Random();
+            Console.WriteLine(random.Next(1, 10));
+            
+        }
