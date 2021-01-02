@@ -1,0 +1,82 @@
+
+            int[] numbers = { 5, 1, 3, 2, 4, 6, 7, 8, 9, 10, 45, 678, 23456 };
+            Object[] MixObjects = { 1, "string", 'd', new List<int>() { 1, 2, 3, 4, 5 }, "dd", new List<int>() { 5, 2, 4, 4, 3 }, 'h', "hello",45,23 };
+          
+            var AllIntegers = MixObjects.OfType<int>();
+            Console.WriteLine(string.Join(",", AllIntegers));
+
+
+            List<Person> persons = new List<Person>()
+            {
+                new Person("Tod", "Vachev", 1, 180, 26, Gender.Male),
+                new Person("John", "Johnson", 2, 170, 21, Gender.Male),
+                new Person("Anna", "Maria", 3, 150, 22, Gender.Female),
+                new Person("Kyle", "Wilson", 4, 164, 29, Gender.Male),
+                new Person("Anna", "Williams", 5, 164, 28, Gender.Male),
+                new Person("Maria", "Ann", 6, 160, 19, Gender.Female),
+                new Person("John", "Jones", 7, 160, 22, Gender.Female),
+                new Person("Samba", "TheLion", 8, 175, 23, Gender.Male),
+                new Person("Aaron", "Myers", 9, 182, 21, Gender.Male),
+                new Person("Aby", "Wood", 10, 165, 20, Gender.Female),
+                new Person("Maddie","Lewis",  11, 160, 19, Gender.Female),
+                new Person("Lara", "Croft", 12, 162, 23, Gender.Female),
+                new Supplier("name supplier 1","District Supplier 1"),
+                new Supplier("name supplier 2","District Supplier 2")
+
+
+            };
+            
+            //---------------FILTER by TYPE
+
+            IList<Supplier> suppliers = persons.OfType<Supplier>().ToList();
+
+            // --OR
+
+            suppliers = persons.Where(c => c is Supplier).Cast<Supplier>().ToList();
+
+            // --OR
+
+            //--------------Query syntax--------
+
+            var suppliers2 = from p in persons
+                        where p is Supplier
+                        select p;
+
+            suppliers2 = from p in persons
+                         where p is Supplier
+                         where (p as Supplier).Age == 22
+                         select p;
+
+            suppliers2 = from p in persons
+                         let q = p as Supplier
+                         where q.Age == 22
+                         select p;
+
+            //-----------------------------------------Converting to list, arrays, from one type to another
+
+            List<Person> ToCOllection = (from p in persons select p).ToList();
+
+            Person[] ToArrayCollection = (from p in persons select p).ToArray();
+
+
+
+            var BuyersToSuppliers = persons.OfType<Buyer>().ToList().ConvertAll(b => new Supplier { Name = b.Name, District = b.District });
+
+            var BuyersToSuppliers2 = (from p in persons
+                                      where p is Buyer
+                                      let b = p as Buyer
+                                      select new Supplier
+                                      {
+                                          Age = b.Age
+
+                                      }).ToList();
+
+            var NumbersToString = numbers.ToList().ConvertAll(b => b.ToString());
+
+            var NumbersToString2 = (from n in numbers
+                                   select n.ToString()).ToList();
+
+
+            var sss = persons.OrderBy(x => x.Age).OrderBy(x => x.FirstName[0]).GroupBy(x => x.FirstName[0]);
+
+            var sss2 = persons.OrderBy(x => x.FirstName[0]).ThenBy(x => x.Age).GroupBy(X => X.FirstName[0]);
